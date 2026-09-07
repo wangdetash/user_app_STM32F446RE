@@ -45,7 +45,7 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+char usartdata[] = "From User Application\r\n";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,6 +105,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  HAL_UART_Transmit(&huart2,(uint8_t*)usartdata,sizeof(usartdata),HAL_MAX_DELAY);
+	  uint32_t current_tick = HAL_GetTick();
+	  while(HAL_GetTick()<=(current_tick+1000));
 
     /* USER CODE END WHILE */
 
@@ -278,6 +281,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+uint8_t flag = 0;
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,!flag);
+	flag = ! flag;
+}
 
 /* USER CODE END 4 */
 
